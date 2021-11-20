@@ -49,6 +49,14 @@ async def cmd_start(message: types.Message):
     keyboard.add(*buttons_1, *buttons_2, *button_back)
     await message.answer("Вопрос 1", reply_markup=keyboard)
 
+    @dp.message_handler(commands="back")
+async def cmd_start(message: types.Message):
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    buttons_1 = ["Кнопка 1", "Кнопка 2"]
+    buttons_2 = ["Кнопка 3", "Кнопка 4"]
+    button_back = ["Назад"]
+    keyboard.add(*buttons_1, *buttons_2, *button_back)
+    await message.answer("Вопрос", reply_markup=keyboard)
 
 
 if __name__ == '__main__':
