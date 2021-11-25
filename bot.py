@@ -2,15 +2,12 @@ from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from aiogram.dispatcher.filters import Text
-from tkinter import *
+from aiogram.types import KeyboardButton
 
 from config import TOKEN
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
-root = Tk()
-def hi(i):
-    print(i)
 
 def obl_id(id_):
     d = {
@@ -38,8 +35,6 @@ def que_id(id_):
 def obl_con_que_list():
     return [[23, 6], [76, 1], [6, 5], [123, 4], [6, 4], [23, 3], [76, 2], [76, 3]]
 
-obl_name = [""]
-
 @dp.message_handler(commands="start")
 async def cmd_start(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -48,40 +43,30 @@ async def cmd_start(message: types.Message):
     keyboard.add(*buttons_1, *buttons_2)
     await message.answer("Вопрос", reply_markup=keyboard)
 
-"""
-@dp.message_handler(commands=['help'])
-async def send_welcome(message: types.Message):
-    await message.reply("help")
-
-
-    for i in obl_con_obl_list():
-        if (i[0]==None):
-            obl_name = obl_id(i[1])
-
-    k=0
-    for i in obl_con_obl_list():
-        for j in range(2):
-            if (i[j] == obl_name):
-                # buttons = [obl_con_que_list(i[j])]
-                Button(text=str(i), command=lambda i=i: hi(i)).pack()
-                k+=1
-    # keyboard.add(*buttons)
-    root.mainloop()
-    await message.answer("Область 1:", reply_markup=keyboard)
-"""
-
-
+main_obl_id=0
 @dp.message_handler(lambda message: message.text == "Кнопка 1")
-async def without_puree(message: types.Message):
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons_1 = ["Кнопка 1 1", "Кнопка 2 1"]
-    buttons_2 = ["Кнопка 3 1", "Кнопка 4 1"]
-    button_back = ["Назад"]
-    keyboard.add(*buttons_1, *buttons_2, *button_back)
-    await message.answer("Вопрос 1", reply_markup=keyboard)
+async def show_buttons_1(message: types.Message):
+   keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+   for i in obl_con_obl_list():
+      if (i[0] == None):
+         main_obl_id = i[1]
+   for i in obl_con_obl_list():
+      if i[0] == None:
+         continue
+      if (i[0] == main_obl_id and i[1] == main_obl_id):
+         #await message.answer(i[1] and i[0], reply_markup=keyboard)
+         buttons = [i[0], i[1]]
+      elif (i[0] == main_obl_id):
+         #await message.answer(i[1], reply_markup=keyboard)
+         buttons = [i[1]]
+      elif (i[1] == main_obl_id):
+         #await message.answer(i[0], reply_markup=keyboard)
+         buttons = [i[0]]
+      keyboard.add(*buttons)
+      await message.answer("Область 1", reply_markup=keyboard)
 
 @dp.message_handler(lambda message: message.text == "Кнопка 2")
-async def without_puree(message: types.Message):
+async def show_buttons_2(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     buttons_1 = ["Кнопка 1 2", "Кнопка 2 2"]
     buttons_2 = ["Кнопка 3 2", "Кнопка 4 2"]
@@ -90,7 +75,7 @@ async def without_puree(message: types.Message):
     await message.answer("Вопрос 2", reply_markup=keyboard)
 
 @dp.message_handler(lambda message: message.text == "Кнопка 3")
-async def without_puree(message: types.Message):
+async def show_buttons_3(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     buttons_1 = ["Кнопка 1 3", "Кнопка 2 3"]
     buttons_2 = ["Кнопка 3 3", "Кнопка 4 3"]
@@ -99,7 +84,7 @@ async def without_puree(message: types.Message):
     await message.answer("Вопрос 3", reply_markup=keyboard)
 
 @dp.message_handler(lambda message: message.text == "Кнопка 4")
-async def without_puree(message: types.Message):
+async def show_buttons_4(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     buttons_1 = ["Кнопка 1 4", "Кнопка 2 4"]
     buttons_2 = ["Кнопка 3 4", "Кнопка 4 4"]
@@ -109,7 +94,7 @@ async def without_puree(message: types.Message):
 
 
 @dp.message_handler(lambda message: message.text == "Назад")
-async def without_puree(message: types.Message):
+async def show_buttons(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     buttons_1 = ["Кнопка 1", "Кнопка 2"]
     buttons_2 = ["Кнопка 3", "Кнопка 4"]
