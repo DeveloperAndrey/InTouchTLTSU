@@ -1,33 +1,73 @@
-import pymorphy2
+import glob
+import os
+from aiogram import Bot, Dispatcher, executor, types
 
-morph = pymorphy2.MorphAnalyzer(lang='ru')
-inp = input()
-output = []
-qalist1 = []
-tags = ['обед','расписание']  # вместо tags будет просто прикреплена область из бд
-qa = {"в обед": "когда обед", "будет": "расписание"}
-keyword = inp.split()
-for i in keyword:
-    output.append((str(morph.normal_forms(i)[0])))
-for i in qa:
-    qalist = qa[i].split()
-    qalist1 += qalist
-try:
-    if len(qa)>len(qalist1):
-        for i in range(len(qalist1)):
-            for k in range(len(qa)):
-                if qa[i] == qalist1[k]:
-                    print(f"Нужное слово нашлось {qalist1[k]}")
-                    break
-    else :
-        for i in range(len(qa)):
-            for k in range(len(qalist1)):
-                if qalist1[i] == qa[k]:
-                    print(f"Нужное слово нашлось {qa[k]}")
-                    break
+# Объект бота
+from parser import file
 
-except:
-    print("eror 404 key eroro ты дурак")
-# сравнинвать по буквам и позициям имея какой то счётчик
-# dict.update([other]) - обновляет словарь, добавляя пары (ключ, значение) из other. Существующие ключи перезаписываются. Возвращает None (не новый словарь!).
-# попробовать через колекции
+bot = Bot(token="2145085210:AAHzKokhuGOC62RpzUcmWTO90mQHtHvU8tQ")
+# Диспетчер для бота
+dp = Dispatcher(bot)
+# Хэндлер на команду /test1
+@dp.message_handler(commands=['start'])
+async def process_start_command(message: types.Message):
+    await message.reply("да начнётся секс!")
+
+
+@dp.message_handler(commands=['start', 'help'])
+
+@dp.message_handler(commands=['help'])
+async def process_help_command(message: types.Message):
+    await message.reply("Тестим тестим тестим")
+
+@dp.message_handler()
+async def test(msg: types.Message):
+    inp = (msg.text)+'('
+    papapa = inp+"*.gif"
+    spisok = glob.glob(papapa)
+    doc = open(spisok[0], 'rb')
+    await bot.send_document(msg.from_user.id, (doc, str))
+
+
+
+@dp.message_handler()
+async def echo_message(msg: types.Message):
+    await bot.send_message(msg.from_user.id, msg.text)
+
+
+
+"""
+есть куча разных фалов .мне передают названия своих группы кафедры специаьности всё есть в названии файлов
+я беру текест пользователя благордоря голбу какие названия файлов совпадают
+он возвращает всегда список из разных файлов и я благодоря этим путям их возвращаю 
+"""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == "__main__":
+    # Запуск бота
+    executor.start_polling(dp, skip_updates=True)
+
+
+
+
+
+
+
+
+
+
+
