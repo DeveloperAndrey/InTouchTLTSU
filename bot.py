@@ -75,8 +75,8 @@ async def show_buttons_1(message: types.Message):
             #await message.answer(obl_id(i[0]), reply_markup=keyboard)
             buttons = [obl_id(i[0])]
             keyboard.add(*buttons)
-    #button_back = ["Назад"]
-    #keyboard.add(*button_back)
+    #button_main_menu = ["В начало"]
+    #keyboard.add(*button_main_menu)
     await message.answer("Типа область 1", reply_markup=keyboard)
 
 @dp.message_handler(lambda message: message.text == "42? Нет")
