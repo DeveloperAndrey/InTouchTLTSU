@@ -35,71 +35,55 @@ def que_id(id_):
 def obl_con_que_list():
     return [[23, 6], [76, 1], [6, 5], [123, 4], [6, 4], [23, 3], [76, 2], [76, 3]]
 
-@dp.message_handler(commands="start")
+
+@dp.message_handler(commands="start", "В начало")
 async def cmd_start(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons_1 = ["Кнопка 1", "Кнопка 2"]
-    buttons_2 = ["Кнопка 3", "Кнопка 4"]
-    keyboard.add(*buttons_1, *buttons_2)
-    await message.answer("Вопрос", reply_markup=keyboard)
+    button_start = ["Да"]
+    keyboard.add(*button_start)
+    await message.answer("Хотите начать?", reply_markup=keyboard)
 
-main_obl_id=0
-@dp.message_handler(lambda message: message.text == "Кнопка 1")
+
+@dp.message_handler(lambda message: message.text == "Да")
 async def show_buttons_1(message: types.Message):
-   keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-   for i in obl_con_obl_list():
-      if (i[0] == None):
-         main_obl_id = i[1]
-   for i in obl_con_obl_list():
-      if i[0] == None:
-         continue
-      if (i[0] == main_obl_id and i[1] == main_obl_id):
-         #await message.answer(i[1] and i[0], reply_markup=keyboard)
-         buttons = [i[0], i[1]]
-      elif (i[0] == main_obl_id):
-         #await message.answer(i[1], reply_markup=keyboard)
-         buttons = [i[1]]
-      elif (i[1] == main_obl_id):
-         #await message.answer(i[0], reply_markup=keyboard)
-         buttons = [i[0]]
-      keyboard.add(*buttons)
-      await message.answer("Область 1", reply_markup=keyboard)
-
-@dp.message_handler(lambda message: message.text == "Кнопка 2")
-async def show_buttons_2(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons_1 = ["Кнопка 1 2", "Кнопка 2 2"]
-    buttons_2 = ["Кнопка 3 2", "Кнопка 4 2"]
-    button_back = ["Назад"]
-    keyboard.add(*buttons_1, *buttons_2, *button_back)
-    await message.answer("Вопрос 2", reply_markup=keyboard)
+    main_obl_id = 0
+    for i in obl_con_obl_list():
+        if (i[0] == None):
+            main_obl_id = i[1]
 
-@dp.message_handler(lambda message: message.text == "Кнопка 3")
-async def show_buttons_3(message: types.Message):
+    for i in obl_con_que_list():
+        if (i[0] == main_obl_id):
+            #await message.answer(que_id(i[1]), reply_markup=keyboard)
+            buttons = [que_id(i[1])]
+            keyboard.add(*buttons)
+
+        elif (i[1] == main_obl_id):
+            #await message.answer(que_id(i[0]), reply_markup=keyboard)
+            buttons = [que_id(i[0])]
+            keyboard.add(*buttons)
+
+    for i in obl_con_obl_list():
+        if i[0] == None:
+            continue
+
+        if (i[0] == main_obl_id):
+            #await message.answer(obl_id(i[1]), reply_markup=keyboard)
+            buttons = [obl_id(i[1])]
+            keyboard.add(*buttons)
+        elif (i[1] == main_obl_id):
+            #await message.answer(obl_id(i[0]), reply_markup=keyboard)
+            buttons = [obl_id(i[0])]
+            keyboard.add(*buttons)
+    #button_back = ["Назад"]
+    #keyboard.add(*button_back)
+    await message.answer("Типа область 1", reply_markup=keyboard)
+
+@dp.message_handler(lambda message: message.text == "42? Нет")
+async def show_buttons_1(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons_1 = ["Кнопка 1 3", "Кнопка 2 3"]
-    buttons_2 = ["Кнопка 3 3", "Кнопка 4 3"]
-    button_back = ["Назад"]
-    keyboard.add(*buttons_1, *buttons_2, *button_back)
-    await message.answer("Вопрос 3", reply_markup=keyboard)
+    await message.answer("А вот и да!", reply_markup=keyboard)
 
-@dp.message_handler(lambda message: message.text == "Кнопка 4")
-async def show_buttons_4(message: types.Message):
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons_1 = ["Кнопка 1 4", "Кнопка 2 4"]
-    buttons_2 = ["Кнопка 3 4", "Кнопка 4 4"]
-    button_back = ["Назад"]
-    keyboard.add(*buttons_1, *buttons_2, *button_back)
-    await message.answer("Вопрос 4", reply_markup=keyboard)
-
-
-@dp.message_handler(lambda message: message.text == "Назад")
-async def show_buttons(message: types.Message):
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons_1 = ["Кнопка 1", "Кнопка 2"]
-    buttons_2 = ["Кнопка 3", "Кнопка 4"]
-    keyboard.add(*buttons_1, *buttons_2)
-    await message.answer("Вопрос", reply_markup=keyboard)
 
 if __name__ == '__main__':
    executor.start_polling(dp)
