@@ -36,7 +36,7 @@ def obl_con_que_list():
     return [[23, 6], [76, 1], [6, 5], [123, 4], [6, 4], [23, 3], [76, 2], [76, 3]]
 
 
-@dp.message_handler(commands="start", "В начало")
+@dp.message_handler(commands="start")
 async def cmd_start(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     button_start = ["Да"]
@@ -75,8 +75,6 @@ async def show_buttons_1(message: types.Message):
             #await message.answer(obl_id(i[0]), reply_markup=keyboard)
             buttons = [obl_id(i[0])]
             keyboard.add(*buttons)
-    #button_main_menu = ["В начало"]
-    #keyboard.add(*button_main_menu)
     await message.answer("Типа область 1", reply_markup=keyboard)
 
 @dp.message_handler(lambda message: message.text == "42? Нет")
