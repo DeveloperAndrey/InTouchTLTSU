@@ -44,20 +44,27 @@ def que_id(id_):
     }
     return d[id_]
 
+def que_list():
+    return ['A? No', 'Смысл жизни? 42', '42? Нет', 'Я тебе покушать принёс? Отвали', 'Сколько тут тараканов? 128**128**128**128', 'qwe? йцу']
+
 def obl_con_que_list():
     return [[23, 6], [76, 1], [6, 5], [123, 4], [6, 4], [23, 3], [76, 2], [76, 3]]
 
-main_obl_id = 0
-for i in obl_con_obl_list():
-    if (i[0] == None):
-        main_obl_id = i[1]
 
-state_id = main_obl_id
+def global_per():
+    global main_obl_id
+    for i in obl_con_obl_list():
+        if (i[0] == None):
+            main_obl_id = i[1]
+
+    global state_id
+    state_id = main_obl_id
 
 
 @dp.message_handler(commands="start")
 async def show_main_menu(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    global_per()
     for i in obl_con_obl_list():
         if i[0] == None:
             continue
@@ -72,24 +79,11 @@ async def show_main_menu(message: types.Message):
     keyboard.add(*buttons)
     await message.answer("Основные категории", reply_markup=keyboard)
 
-@dp.message_handler(lambda message: message.text == "Вопросы по теме 1")
-async def show_que_menu(message: types.Message):
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    for i in obl_con_que_list():
-        if (i[0] == main_obl_id):
-            buttons = [que_id(i[1])]
-            keyboard.add(*buttons)
-
-        elif (i[1] == main_obl_id):
-            buttons = [que_id(i[0])]
-            keyboard.add(*buttons)
-    await message.answer("Вот:", reply_markup=keyboard)
-
 
 @dp.message_handler(lambda message: message.text in obl_names())
 async def show_some_menu(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-
+    state_id = id_obl(message.text)
     for i in obl_con_obl_list():
         if i[0] == None:
             continue
@@ -103,13 +97,12 @@ async def show_some_menu(message: types.Message):
 
     buttons = ["Вопросы по теме"]
     keyboard.add(*buttons)
-    state_id = id_obl(message.text)
     buttons = ["Назад"]
     keyboard.add(*buttons)
     await message.answer("AAA", reply_markup=keyboard)
 
 @dp.message_handler(lambda message: message.text == "Назад")
-async def show_some_menu(message: types.Message):
+async def show_some_menu_1(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
 
     for i in obl_con_obl_list():
@@ -129,10 +122,16 @@ async def show_some_menu(message: types.Message):
     keyboard.add(*buttons)
     await message.answer("AAA", reply_markup=keyboard)
 
-@dp.message_handler(lambda message: message.text == "42? Нет")
-async def reply(message: types.Message):
+@dp.message_handler(lambda message: message.text == "Вопросы по теме")
+async def show_que_menu(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    await message.answer("А вот и да!", reply_markup=keyboard)
+    for i in obl_con_que_list():
+        if (i[0] == state_id):
+            buttons = [que_id(i[1])]
+            keyboard.add(*buttons)
+    buttons = ["Назад"]
+    keyboard.add(*buttons)
+    await message.answer("Вот:", reply_markup=keyboard)
 
 if __name__ == '__main__':
    executor.start_polling(dp)
