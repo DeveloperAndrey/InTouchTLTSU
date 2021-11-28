@@ -108,31 +108,10 @@ async def show_some_menu(message: types.Message):
         elif (i[1] == id_obl(message.text)):
             buttons = [obl_id(i[0])]
             keyboard.add(*buttons)
-
+    
     buttons1 = ["Вопросы по теме"]
-    buttons2 = ["Назад"]
-    buttons3 = ["В начало"]
-    keyboard.add(*buttons2, *buttons1, *buttons3)
-    await message.answer("AAA", reply_markup=keyboard)
-
-@dp.message_handler(lambda message: message.text == "Назад")
-async def show_some_menu_1(message: types.Message):
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-
-    for i in obl_con_obl_list():
-        if i[0] == None:
-            continue
-
-        if (i[0] == state_id[0]):
-            buttons = [obl_id(i[1])]
-            keyboard.add(*buttons)
-        elif (i[1] == state_id[0]):
-            buttons = [obl_id(i[0])]
-            keyboard.add(*buttons)
-    buttons1 = ["Вопросы по теме"]
-    buttons2 = ["Назад"]
-    buttons3 = ["В начало"]
-    keyboard.add(*buttons2, *buttons1, *buttons3)
+    buttons2 = ["В начало"]
+    keyboard.add(*buttons1, *buttons2)
     await message.answer("AAA", reply_markup=keyboard)
 
 @dp.message_handler(lambda message: message.text == "Вернуться к теме")
@@ -149,9 +128,8 @@ async def show_some_menu_1(message: types.Message):
             buttons = [obl_id(i[0])]
             keyboard.add(*buttons)
     buttons1 = ["Вопросы по теме"]
-    buttons2 = ["Назад"]
-    buttons3 = ["В начало"]
-    keyboard.add(*buttons2, *buttons1, *buttons3)
+    buttons2 = ["В начало"]
+    keyboard.add(*buttons1, *buttons2)
     await message.answer("AAA", reply_markup=keyboard)
 
 @dp.message_handler(lambda message: message.text == "Вопросы по теме")
