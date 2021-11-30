@@ -5,26 +5,20 @@ cur = con.cursor()
 
 cur.execute("""CREATE TABLE IF NOT EXISTS qwestion_answer(
     id INT PRIMARY KEY,
-    ans TEXT,
-    qw TEXT);
+    qw TEXT,
+    ans TEXT);
 """)
 con.commit()
 
-def dob():
-    date_base = ('00001','Когда первая пара?','8:30')
+def dob (i,q,a):
+    data_base = i,q,a
+    cur.execute("INSERT OR IGNORE INTO qwestion_answer VALUES(?, ?, ?);", data_base)
 
-    cur.execute("INSERT OR IGNORE INTO qwestion_answer VALUES(?, ?, ?);", date_base)
     con.commit()
 
-
-def viv_one():
+def viv_many(k):
     cur.execute("SELECT*FROM qwestion_answer;")
-    print(cur.fetchone())
-
-
-def viv_many():
-    cur.execute("SELECT*FROM qwestion_answer;")
-    print(cur.fetchmany(3))
+    print(cur.fetchmany(k))
 
 
 def viv_all():
@@ -33,10 +27,10 @@ def viv_all():
 
 
 
-def del_1():
-    cur.execute("""DELETE FROM qwestion_answer WHERE id='1';""")
+def del_1(i):
+    d = ("""DELETE FROM qwestion_answer WHERE id = ? """)
+    cur.execute(d,(i,))
     con.commit()
 
-viv_all()
 
-    
+viv_all()
