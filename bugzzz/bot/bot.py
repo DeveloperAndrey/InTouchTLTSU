@@ -18,7 +18,8 @@ async def add_admin(message):
     if (message.text.isdigit()):
         add_admin1(message.text)
     else:
-        print('Вы ввели неправильный id')
+        await message.answer("Вы ввели неправильный id")
+        #print('Вы ввели неправильный id')
 
 
 @dp.message_handler(commands=['delete_admin'])
@@ -27,7 +28,8 @@ async def delete_admin(message):
         if message.text in list_admin():
             del_admin(message.text)
     else:
-        print('Вы ввели неправильный id')
+        await message.answer("Вы ввели неправильный id")
+        #print('Вы ввели неправильный id')
 
 
 @dp.message_handler(commands=['add_question'])
@@ -41,7 +43,8 @@ async def delete_question(message):
         if message.text in list_que():
             del_que(message.text)
     else:
-        print('Вы ввели неправильный id')
+        await message.answer("Вы ввели неправильный id")
+        #print('Вы ввели неправильный id')
 
 
 @dp.message_handler(commands=['question_connect_area'])
@@ -50,7 +53,8 @@ async def question_connect_area(message1, message2):
         if message2.text in list_area() and message1.text in list_que():
             add_que_area(message1.text, message2.text)
     else:
-        print('Вы ввели неправильный id')
+        await message.answer("Вы ввели неправильный id")
+        #print('Вы ввели неправильный id')
 
 
 @dp.message_handler(commands=['area_connect_area'])
@@ -60,7 +64,8 @@ async def area_connect_area(message):
         if message1.text in list_area() and message2.text in list_area():
             add_area_area(message1.text, message2.text)
     else:
-        print('Вы ввели неправильный id')
+        await message.answer("Вы ввели неправильный id")
+        #print('Вы ввели неправильный id')
 
 
 @dp.message_handler(commands=['area_connect'])
@@ -74,7 +79,8 @@ async def area_delete(message):
         if message.text in list_area():
             del_area(message.text)
     else:
-        print('Вы ввели неправильный id')
+        await message.answer("Вы ввели неправильный id")
+        #print('Вы ввели неправильный id')
 
 
 @dp.message_handler(commands=['delete_area_connect_area'])
@@ -85,7 +91,8 @@ async def delete_area_connect_area(message):
             del_area_area(message1.text, message2.text)
 
     else:
-        print('Вы ввели неправильный id')
+        await message.answer("Вы ввели неправильный id")
+        #print('Вы ввели неправильный id')
 
 
 @dp.message_handler(commands=['delete_question_connect_area'])
@@ -95,7 +102,8 @@ async def delete_question_connect_area(message):
         if [int(message1.text), int(message2.text)] in obl_con_que_list():
             del_que_area(message1.text, message2.text)
     else:
-        print('Вы ввели неправильный id')
+        await message.answer("Вы ввели неправильный id")
+        #print('Вы ввели неправильный id')
 
 
 """
