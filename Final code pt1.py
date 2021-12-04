@@ -1,236 +1,161 @@
-from aiogram import Bot, types 
+import glob
+from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from aiogram.dispatcher.filters import Text
 from aiogram.types import KeyboardButton
 from config import TOKEN
-import sqlite3 
+import sqlite3
+from Function import *
+from collections import *
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
-db =   sqlite3.connect('db/database.db')#cursor
-cursor = db.cursor()
-
-cursor.execute(""" CREATE TABLE IF NOT EXISTS AreaArea( id INTEGER PRIMARY KEY , idParentArea INTEGER, idChildArea INTEGER)""")
-db.commit()
-
-
-cursor.execute(""" CREATE TABLE IF NOT EXISTS  ADMINS ( id INTEGER PRIMARY KEY ,  idtelegram INTEGER  )""")
-db.commit()
-
-
-
-def obl_con_obl_list():
-    return [[None, 23], [23, 6], [23, 76], [6, 123], [23, 123]]
-#is_admin()
-
-def obl_con_que_list():
-    return [[23, 6], [76, 1], [6, 5], [123, 4], [6, 4], [23, 3], [76, 2], [76, 3]]
 
 @dp.message_handler(commands=['add_admin'])
 async def add_admin(message):
-   if(message.text.isdigit()):
+    if (message.text.isdigit()):
         add_admin1(message.text)
-   else:
-       print('Вы ввели неправильный id')
-
-
-
-
+    else:
+         await message.answer('Вы ввели неправильный id')
 
 
 @dp.message_handler(commands=['delete_admin'])
 async def delete_admin(message):
     if (message.text.isdigit()):
-         if message.text in list_admin():
-          del_admin(message.text)
+        if message.text in list_admin():
+            del_admin(message.text)
     else:
-        print('Вы ввели неправильный id')
+        await message.answer('Вы ввели неправильный id')
+
 
 @dp.message_handler(commands=['add_question'])
 async def add_question(message):
-
     add_que(message.text)
+
 
 @dp.message_handler(commands=['delete_question'])
 async def delete_question(message):
     if (message.text.isdigit()):
         if message.text in list_que():
-          del_que(message.text)
+            del_que(message.text)
     else:
-        print('Вы ввели неправильный id')
+         await message.answer('Вы ввели неправильный id')
+
 
 @dp.message_handler(commands=['question_connect_area'])
 async def question_connect_area(message1, message2):
     if (message1.text.isdigit() and message2.text.isdigit()):
         if message2.text in list_area() and message1.text in list_que():
-          add_que_area(message1.text, message2.text)
+            add_que_area(message1.text, message2.text)
     else:
-        print('Вы ввели неправильный id')
+         await message1.answer('Вы ввели неправильный id')
+         
+
 
 @dp.message_handler(commands=['area_connect_area'])
 async def area_connect_area(message):
     message1, message2 = message.text.split()
     if (message1.text.isdigit() and message2.text.isdigit()):
         if message1.text in list_area() and message2.text in list_area():
-          add_area_area(message1.text, message2.text)
+            add_area_area(message1.text, message2.text)
     else:
-        print('Вы ввели неправильный id')
+         await message.answer('Вы ввели неправильный id')
 
 
 @dp.message_handler(commands=['area_connect'])
 async def area_add(message):
-         add_area(message.text)
+    add_area(message.text)
+
 
 @dp.message_handler(commands=['area_delete'])
 async def area_delete(message):
     if (message.text.isdigit()):
         if message.text in list_area():
-          del_area(message.text)
+            del_area(message.text)
     else:
-        print('Вы ввели неправильный id')
+         await message.answer('Вы ввели неправильный id')
+
 
 @dp.message_handler(commands=['delete_area_connect_area'])
 async def delete_area_connect_area(message):
     message1, message2 = message.text.split()
     if (message1.text.isdigit() and message2.text.isdigit()):
-        if [int(message1.text),int(message2.text)] in obl_con_obl_list():
-          del_area_area(message1.text, message2.text)
+        if [int(message1.text), int(message2.text)] in obl_con_obl_list():
+            del_area_area(message1.text, message2.text)
 
     else:
-        print('Вы ввели неправильный id')
+         await message.answer('Вы ввели неправильный id')
+
 
 @dp.message_handler(commands=['delete_question_connect_area'])
 async def delete_question_connect_area(message):
     message1, message2 = message.text.split()
     if (message1.text.isdigit() and message2.text.isdigit()):
-        if [int(message1.text),int(message2.text)] in obl_con_que_list():
-          del_que_area(message1.text, message2.text)
+        if [int(message1.text), int(message2.text)] in obl_con_que_list():
+            del_que_area(message1.text, message2.text)
     else:
-        print('Вы ввели неправильный id')
+         await message.answer('Вы ввели неправильный id')
 
 
+"""
+@dp.message_handler(commands=['help'])
+async def process_help_command(message: types.Message):
+    await message.reply("Тестим тестим тестим")
+"""
 
 
+@dp.message_handler(commands=['find'])
+async def test(msg: types.Message):
+    inp = (msg.text)
+    output = Counter(inp.split())
+    qa_var1 = {}
 
+    l = [[Counter(i.split()), qa_var1[i]] for i in qa_var1]
 
-
-
-
-async def select_name():
-    return [[1,'we'], [2,'yu']]
-
-
-
-
-
-
-
-def add_admin1(id_):
-    if not isinstance(id_, int):
-        raise Warning('ne int')
-    else:    
-     cursor.execute("INSERT INTO ADMINS VALUES (NULL,  ?)", (id_, ))
-     db.commit()
-
-
-def list_admin():
-    select_all_rows = "SELECT * FROM ADMINS "
-    cursor.execute(select_all_rows)
-    rows = cursor.fetchall()
-    return rows
-
-
-def del_admin(id_):
-    if not isinstance(id_, int):
-        raise Warning('ne int')
+    max_s = -1
+    ind = list()
+    for j, i in enumerate(l):
+        s = sum((output & l[j][0]).values())
+        if s == max_s:
+            ind.append(j)
+        elif s > max_s:
+            ind = [j]
+            max_s = s
+    if max_s == 0:
+        await bot.send_message(msg.from_user.id, 'noobe')
     else:
-     cursor.execute(""" DELETE FROM ADMINS WHERE idtelegram = ? """, (id_,))
-     db.commit()
+        for i in ind:
+            await bot.send_message(msg.from_user.id, l[i][1])
 
 
-def add_que(id_):
-    if not isinstance(id_, str):
-        raise Warning('ne int')
-    return 543
+"""
 
 
-def list_que():
-    return [65456, 543, 5344]
+@dp.message_handler(commands=['help'])
+async def process_help_command(message: types.Message):
+ await message.reply("Тут пока ничего нету")
+ """
 
 
-def del_que(id_):
-    if not isinstance(id_, int):
-        raise Warning('ne int')
-    return 'ok'
+@dp.message_handler(commands=['glob'])
+async def test(msg: types.Message):
+    inp = (msg.text)
+    papapa = inp + "*.pdf"
+    spisok = glob.glob(papapa)
+    doc = open(spisok[0], "rb")
+    await bot.send_document(msg.from_user.id, doc)
+    await bot.send_document(msg.chat.id, "FILEID")
 
 
-def add_area(id_):
-    if not isinstance(id_, str):
-        raise Warning('ne int')
-    else: 
-     cursor.execute(""" CREATE TABLE IF NOT EXISTS  Area ( id INTEGER PRIMARY KEY ,  idtelegram TEXT  )""")
-     db.commit()
+# Конец поиска файлов
 
 
-def list_area():
-    return [123, 432, 6343]
+# Начало распоз слова
 
-
-def del_area(id_):
-    if not isinstance(id_, int):
-        raise Warning('ne int')
-    else: 
-     cursor.execute(""" DROP TABLE IF EXISTS Area ( id INTEGER PRIMARY KEY ,  idtelegram INTEGER  )""")
-     db.commit()
-
-# Нужен человек работающий с ОбластьВопрос
-def add_que_area(id_, id_1):
-    if not isinstance(id_, int) or not isinstance(id_1, int):
-        raise Warning('ne int')
-    return 'ok'
-
-# Нужен человек работающий с ОбластьВопрос
-def list_que_area():
-    select_all_rows = "SELECT * FROM AreaQuestion "
-    cursor.execute(select_all_rows)
-    rows = cursor.fetchall()
-    return rows
-
-# Нужен человек работающий с ОбластьВопрос
-def del_que_area(id_, id_1):
-    if not isinstance(id_, int) or not isinstance(id_1, int):
-        raise Warning('ne int')
-    return 'ok'
-
-
-def add_area_area(id_, id_1):
-    if not isinstance(id_, int) or not isinstance(id_1, int):
-        raise Warning('ne int')
-    else:
-     cursor.execute("INSERT INTO AreaArea VALUES (NULL, ? , ? )", ( id_, id_1))
-     db.commit()
-
-
-def list_area_area():
-    select_all_rows = "SELECT * FROM AreaArea "
-    cursor.execute(select_all_rows)
-    rows = cursor.fetchall()
-    return rows
-
-def del_area_area(id_, id_1):
-    if not isinstance(id_, int) or not isinstance(id_1, int):
-        raise Warning('ne int')
-    else:
-     cursor.execute(""" DELETE FROM AreaArea WHERE id = ? """, (id,))
-     db.commit()
-
-
-      
-      
-      
-      
+# Конец распоз слова
+"""
 def obl_id(id_):
     d = {
         123: 'havka',
@@ -239,26 +164,19 @@ def obl_id(id_):
         76: 'profkom'
     }
     return d[id_]
+"""
+def obl_id(): 
+ return cur.execute(""" SELECT idAreas, Name FROM Area;""")
 
 
-def id_obl(id_):
-    d = {
-        'havka': 123,
-        'qwe': 23,
-        'obshaga': 6,
-        'profkom': 76,
-    }
-    return d[id_]
 
 
-def obl_names():
-    return ['havka', 'qwe', 'obshaga', 'profkom']
 
 
-def obl_con_obl_list():
-    return [[None, 23], [23, 6], [23, 76], [6, 123], [23, 123]]
 
-
+def que_id():
+    return cur.execute("""SELECT  idQuestions, Question FROM Question;""")
+""""
 def que_id(id_):
     d = {
         1: 'A? No',
@@ -269,27 +187,32 @@ def que_id(id_):
         6: 'qwe? йцу',
     }
     return d[id_]
-
-
 def que_list():
     return ['A? No', 'Смысл жизни? 42', '42? Нет', 'Я тебе покушать принёс? Отвали',
             'Сколько тут тараканов? 128**128**128**128', 'qwe? йцу']
-
-
+            """
 def obl_con_que_list():
-    return [[23, 6], [76, 1], [6, 5], [123, 4], [6, 4], [23, 3], [76, 2], [76, 3]]
+    return cur.execute("""SELECT idAreas, idQuestions FROM Area_question;""")
+
+
+def obl_con_obl_list():
+    return cur.execute("""SELECT idParentArea, idChildArea FROM AreaArea;""")
+
+
+
+  
 
 
 main_obl_id = {'0': None}
 for i in obl_con_obl_list():
     if (i[0] == None):
         main_obl_id[0] = i[1]
-
 state_id = {'0': None}
 state_id[0] = main_obl_id[0]
 
 
-@dp.message_handler(commands="start")
+
+@dp.message_handler(commands=['start'])
 async def show_main_menu(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     for i in obl_con_obl_list():
@@ -302,6 +225,7 @@ async def show_main_menu(message: types.Message):
         elif (i[1] == main_obl_id[0]):
             buttons = [obl_id(i[0])]
             keyboard.add(*buttons)
+        await message.answer("1")
     buttons = ["Вопросы по теме"]
     keyboard.add(*buttons)
     await message.answer("Основные категории", reply_markup=keyboard)
@@ -343,7 +267,7 @@ async def show_some_menu(message: types.Message):
     buttons1 = ["Вопросы по теме"]
     buttons2 = ["В начало"]
     keyboard.add(*buttons1, *buttons2)
-    await message.answer("AAA", reply_markup=keyboard)
+    await message.answer(".", reply_markup=keyboard)
 
 
 @dp.message_handler(lambda message: message.text == "Вернуться к теме")
@@ -362,7 +286,7 @@ async def show_some_menu_1(message: types.Message):
     buttons1 = ["Вопросы по теме"]
     buttons2 = ["В начало"]
     keyboard.add(*buttons1, *buttons2)
-    await message.answer("AAA", reply_markup=keyboard)
+    await message.answer(".", reply_markup=keyboard)
 
 
 @dp.message_handler(lambda message: message.text == "Вопросы по теме")
