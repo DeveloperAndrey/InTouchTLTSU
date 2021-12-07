@@ -196,10 +196,10 @@ async def show_main_menu(message: types.Message):
         if i[0] is None:
             continue
 
-        if i[0] == main_obl_id[0]:
+        if i[0] == main_obl_id()[0]:
             buttons = [obl()[i][1]]
             keyboard.add(*buttons)
-        elif i[1] == main_obl_id[0]:
+        elif i[1] == main_obl_id()[0]:
             buttons = [obl()[i][0]]
             keyboard.add(*buttons)
         await message.answer("1")
@@ -215,10 +215,10 @@ async def show_main_menu(message: types.Message):
         if i[0] is None:
             continue
 
-        if i[0] == main_obl_id[0]:
+        if i[0] == main_obl_id()[0]:
             buttons = [obl()[i][1]]
             keyboard.add(*buttons)
-        elif i[1] == main_obl_id[0]:
+        elif i[1] == main_obl_id()[0]:
             buttons = [obl()[i][0]]
             keyboard.add(*buttons)
     buttons = ["Вопросы по теме"]
@@ -229,7 +229,7 @@ async def show_main_menu(message: types.Message):
 @dp.message_handler(lambda message: message.text in obl_names())
 async def show_some_menu(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    state_id[0] = list_area()[message.text]
+    state_id()[0] = list_area()[message.text]
     for i in obl_con_obl_list():
         if i[0] is None:
             continue
@@ -254,10 +254,10 @@ async def show_some_menu_1(message: types.Message):
         if i[0] is None:
             continue
 
-        if i[0] == state_id[0]:
+        if i[0] == state_id()[0]:
             buttons = [obl()[i][1]]
             keyboard.add(*buttons)
-        elif i[1] == state_id[0]:
+        elif i[1] == state_id()[0]:
             buttons = [obl()[i][0]]
             keyboard.add(*buttons)
     buttons1 = ["Вопросы по теме"]
@@ -270,7 +270,7 @@ async def show_some_menu_1(message: types.Message):
 async def show_que_menu(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     for i in obl_con_que_list():
-        if i[0] == state_id[0]:
+        if i[0] == state_id()[0]:
             buttons = [que()[i][1]]
             keyboard.add(*buttons)
     buttons = ["Вернуться к теме"]
