@@ -142,6 +142,15 @@ def obl_con_obl_list():
     return rows
 
 
+def main_obl_id():
+    main_obl_id = {1: obl_con_obl_list()[0]}
+    return main_obl_id
+
+
+def state_id():
+    state_id = {1: obl_con_obl_list()[0], 2: None}
+    return state_id
+
 # область-область
 
 cur.execute(
